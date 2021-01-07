@@ -10,7 +10,7 @@
 //Firebase service account : "firebase-adminsdk-trg39@esp32-f9c31.iam.gserviceaccount.com"
 
 #define FIREBASE_HOST "https://esp32-f9c31-default-rtdb.europe-west1.firebasedatabase.app/" //Change to your Firebase RTDB project ID e.g. Your_Project_ID.firebaseio.com
-#define FIREBASE_AUTH "o7DjzwI6nkqLcRU3fgT93hR2f3SOpcyqOu02BoCz" //Change to your Firebase RTDB secret password
+#define FIREBASE_AUTH "" //Change to your Firebase RTDB secret password
 
 //Define FirebaseESP32 data object
 FirebaseData firebaseData;
