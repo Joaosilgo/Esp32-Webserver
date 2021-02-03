@@ -9,89 +9,210 @@ copies or substantial portions of the Software. -->
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ESP32</title>
+  <meta name="description" content="Esp32 Webserver .">
+  <meta name="format-detection" content="telephone=no">
+  <meta property="og:title" content="Esp32 Webserver">
+  <meta property="og:description" content="Esp32 Webserver. This article explains how Esp32 Webserver Work.">
+  <meta property="og:image" content="https://github.com/Joaosilgo/Esp32-Webserver">
+  <meta property="og:url" content="https://github.com/Joaosilgo/Esp32-Webserver">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="agektmr">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"
+    integrity="sha512-EZLkOqwILORob+p0BXZc+Vm3RgJBOe1Iq/0fiI7r/wJgzOFZMlsqTa29UEl6v6U6gsV4uIpsNZoV32YZqrCRCQ=="
+    crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
+    integrity="sha512-5fsy+3xG8N/1PV5MIJz9ZsWpkltijBI48gBzQ/Z2eVATePGHOkMIn+xTDHIfTZFVb9GMpflF2wOWItqxAP2oLQ=="
+    crossorigin="anonymous" />
 
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/modules/export-data.js"></script>
+  <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+  <link href="data:image/x-icon;base64,AAABAAEAEBAAAAAAAABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//AAD8fwAA/H8AAPxjAAD/4wAA/+MAAMY/AADGPwAAxjEAAP/xAAD/8QAA4x8AAOMfAADjHwAA//8AAP//AAA=" rel="icon" type="image/x-icon">
+
   <style>
-    body {
-      min-width: 310px;
-      max-width: 800px;
-      height: 400px;
-      margin: 0 auto;
+    @-ms-viewport {
+      width: device-width;
     }
 
-    h2 {
-      font-family: Arial;
-      font-size: 2.5rem;
+
+
+    .card {
+      padding: 25px;
+      background: #c7c7c7;
+      margin-top: 20px;
+      border-radius: 4px;
+    }
+
+    .container {
+
+
       text-align: center;
     }
-.highcharts-figure, .highcharts-data-table table {
-  min-width: 320px; 
-  max-width: 800px;
-  margin: 1em auto;
-}
+
+    .highcharts-figure,
+    .highcharts-data-table table {
+      min-width: 320px;
+      max-width: 800px;
+      margin: 1em auto;
+    }
 
 
 
-.highcharts-data-table table {
-  font-family: Verdana, sans-serif;
-  border-collapse: collapse;
-  border: 1px solid #EBEBEB;
-  margin: 10px auto;
-  text-align: center;
-  width: 100%;
-  max-width: 500px;
-}
-.highcharts-data-table caption {
-  padding: 1em 0;
-  font-size: 1.2em;
-  color: #555;
-}
-.highcharts-data-table th {
-  font-weight: 600;
-  padding: 0.5em;
-}
-.highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
-  padding: 0.5em;
-}
-.highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
-  background: #f8f8f8;
-}
-.highcharts-data-table tr:hover {
-  background: #f1f7ff;
-}
+    .highcharts-data-table table {
+      font-family: Verdana, sans-serif;
+      border-collapse: collapse;
+      border: 1px solid #EBEBEB;
+      margin: 10px auto;
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .highcharts-data-table caption {
+      padding: 1em 0;
+      font-size: 1.2em;
+      color: #555;
+    }
+
+    .highcharts-data-table th {
+      font-weight: 600;
+      padding: 0.5em;
+    }
+
+    .highcharts-data-table td,
+    .highcharts-data-table th,
+    .highcharts-data-table caption {
+      padding: 0.5em;
+    }
+
+    .highcharts-data-table thead tr,
+    .highcharts-data-table tr:nth-child(even) {
+      background: #f8f8f8;
+    }
+
+    .highcharts-data-table tr:hover {
+      background: #f1f7ff;
+    }
   </style>
 </head>
 
 <body>
-  <h2>ESP Weather Station</h2>
-  <div id="chart-temperature" class="container"></div>
-  <div id="chart-humidity" class="container"></div>
-  <div id="chart-pressure" class="container"></div>
-  <div id="chart-light" class="container"></div>
-  
-<figure class="highcharts-figure">
-<div id="chart-wifi" class="container"></div>
-</figure>
+  <div class="container ">
+    <section class="header">
+      <h2 class="title"> ESP Weather Station</h2>
+    </section>
+
+    <hr>
+<!--
+    <div class=" container ">
+      <div class="row card">
+        <div class="twelve columns">
+       
+          <h5>Output - GPIO 2</h5>
+          <p class="state">state: <span id="state">%STATE%</span></p> 
+          <hr>
+            
+          <a id="button" class="button button-primary">Toggle</a>
+
+          <a id="share" class="button button-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+              fill="currentColor" class="bi bi-share-fill" viewBox="0 0 16 16">
+              <path
+                d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z" />
+            </svg></a>
+
+         
+        </div>
+      </div>
+    </div>
+-->
+
+<div class=" container ">
+  <a id="button" class="button button-primary"> Vibrate <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-phone-vibrate-fill" viewBox="0 0 18 18">
+    <path d="M4 4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4zm5 7a1 1 0 1 0-2 0 1 1 0 0 0 2 0zM1.807 4.734a.5.5 0 1 0-.884-.468A7.967 7.967 0 0 0 0 8c0 1.347.334 2.618.923 3.734a.5.5 0 1 0 .884-.468A6.967 6.967 0 0 1 1 8c0-1.18.292-2.292.807-3.266zm13.27-.468a.5.5 0 0 0-.884.468C14.708 5.708 15 6.819 15 8c0 1.18-.292 2.292-.807 3.266a.5.5 0 0 0 .884.468A7.967 7.967 0 0 0 16 8a7.967 7.967 0 0 0-.923-3.734zM3.34 6.182a.5.5 0 1 0-.93-.364A5.986 5.986 0 0 0 2 8c0 .769.145 1.505.41 2.182a.5.5 0 1 0 .93-.364A4.986 4.986 0 0 1 3 8c0-.642.12-1.255.34-1.818zm10.25-.364a.5.5 0 0 0-.93.364c.22.563.34 1.176.34 1.818 0 .642-.12 1.255-.34 1.818a.5.5 0 0 0 .93.364C13.856 9.505 14 8.769 14 8c0-.769-.145-1.505-.41-2.182z"/>
+  </svg> </a>
+</div>
+
+
+
+    <hr>
+    <figure class="highcharts-figure">
+    <div id="chart-temperature" class="container"></div></figure>
+    <figure class="highcharts-figure">
+    <div id="chart-humidity" class="container"></div></figure>
+    <figure class="highcharts-figure">
+    <div id="chart-pressure" class="container"></div></figure>
+    <figure class="highcharts-figure">
+    <div id="chart-light" class="container"></div></figure>
+    <hr>
+    <div itemscope itemtype="http://schema.org/Article">
+      <figure class="highcharts-figure">
+        <div id="chart-wifi" class="container"></div>
+      </figure>
+    </div>
+    <hr>
+
+    <div class="row ">
+    <div class="four columns container"> 
+
+        <h5>Design</h5>
+        <hr>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+          ilabore et dolore.</p>
+      </div>
+      <div class="four columns container">
+
+        <h5>Responsive</h5>
+        <hr>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+          ilabore et dolore.</p>
+      </div>
+      <div class="four columns container">
+
+        <h5>Design</h5>
+        <hr>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+          ilabore et dolore.</p>
+      </div>
+    </div>
+
+    <hr>
+
+    <section class="footer u-full-width">
+      <div class="container">
+        <div class="row">
+          <div class="twelve columns">
+            <h6>&copy 2021 Joao Gomes</h6>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
 </body>
 
 
 <script>
-  /*
+  
   var chartT = new Highcharts.Chart({
-    chart:{ renderTo : 'chart-temperature' },
+    chart:{ renderTo : 'chart-temperature', type: "spline",
+      animation: Highcharts.svg, // don't animate in old IE
+      marginRight: 10 },
     title: { text: 'BME280 Temperature' },
     series: [{
-      showInLegend: false,
+      showInLegend: true,
       data: []
     }],
     plotOptions: {
-      line: { animation: false,
+      line: { animation: true,
         dataLabels: { enabled: true }
       },
-      series: { color: '#059e8a' }
+      series: { color: '#00BFFF', name: 'Temperature (Celsius)',
+        showInLegend: true,
+        data: []  }
     },
     xAxis: { type: 'datetime',
       dateTimeLabelFormats: { second: '%H:%M:%S' }
@@ -109,7 +230,7 @@ copies or substantial portions of the Software. -->
         var x = (new Date()).getTime(),
             y = parseFloat(this.responseText);
         //console.log(this.responseText);
-        if(chartT.series[0].data.length > 40) {
+        if(chartT.series[0].data.length > 6000) {
           chartT.series[0].addPoint([x, y], true, true, true);
         } else {
           chartT.series[0].addPoint([x, y], true, false, true);
@@ -118,17 +239,21 @@ copies or substantial portions of the Software. -->
     };
     xhttp.open("GET", "/temperature", true);
     xhttp.send();
-  }, 30000 ) ;
+  }, 1000 ) ;
   
   var chartH = new Highcharts.Chart({
-    chart:{ renderTo:'chart-humidity' },
+    chart:{ renderTo:'chart-humidity',
+            type: "spline",
+      animation: Highcharts.svg, // don't animate in old IE
+      marginRight: 10 },
     title: { text: 'BME280 Humidity' },
     series: [{
-      showInLegend: false,
-      data: []
+     color: '#FFFF33', name: 'Humidity (%)',
+        showInLegend: true,
+        data: [] 
     }],
     plotOptions: {
-      line: { animation: false,
+      line: { animation: true,
         dataLabels: { enabled: true }
       }
     },
@@ -148,7 +273,7 @@ copies or substantial portions of the Software. -->
         var x = (new Date()).getTime(),
             y = parseFloat(this.responseText);
         //console.log(this.responseText);
-        if(chartH.series[0].data.length > 40) {
+        if(chartH.series[0].data.length > 6000) {
           chartH.series[0].addPoint([x, y], true, true, true);
         } else {
           chartH.series[0].addPoint([x, y], true, false, true);
@@ -157,21 +282,78 @@ copies or substantial portions of the Software. -->
     };
     xhttp.open("GET", "/humidity", true);
     xhttp.send();
-  }, 30000 ) ;
-  */
+  }, 1000 ) ;
+  
+
+  var chartP = new Highcharts.Chart({
+    chart:{ renderTo : 'chart-pressure', type: "spline",
+      animation: Highcharts.svg, // don't animate in old IE
+      marginRight: 10 },
+    title: { text: 'BME280 Pressure' },
+    series: [{
+      showInLegend: true,
+      data: []
+    }],
+    plotOptions: {
+      line: { animation: true,
+        dataLabels: { enabled: true }
+      },
+      series: { color: '#8B4513', name: '(hPA)',
+        showInLegend: true,
+        data: [] }
+    },
+    xAxis: { type: 'datetime',
+      dateTimeLabelFormats: { second: '%H:%M:%S' }
+    },
+    yAxis: {
+      title: { text: 'Pressure (hPA)' }
+      //title: { text: 'Temperature (Fahrenheit)' }
+    },
+    credits: { enabled: false }
+  });
+  setInterval(function ( ) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var x = (new Date()).getTime(),
+            y = parseFloat(this.responseText);
+        //console.log(this.responseText);
+        if(chartP.series[0].data.length > 40) {
+          chartP.series[0].addPoint([x, y], true, true, true);
+        } else {
+          chartP.series[0].addPoint([x, y], true, false, true);
+        }
+      }
+    };
+    xhttp.open("GET", "/pressure", true);
+    xhttp.send();
+  }, 1000 ) ;
+  
+
+
   var chartL = new Highcharts.Chart({
-    chart: { renderTo: 'chart-light' },
+    chart: {
+      renderTo: 'chart-light',
+      type: "spline",
+      animation: Highcharts.svg, // don't animate in old IE
+      marginRight: 10
+    },
     title: { text: 'LDR Light' },
     series: [{
-      showInLegend: false,
+      showInLegend: true,
       data: []
     }],
     plotOptions: {
       line: {
-        animation: false,
+        animation: true,
         dataLabels: { enabled: true }
       },
-      series: { color: '#059e8a' }
+      series: {
+        color: '#059e8a',
+        name: 'Lux',
+        showInLegend: true,
+        data: []
+      }
     },
     xAxis: {
       type: 'datetime',
@@ -189,7 +371,7 @@ copies or substantial portions of the Software. -->
         var x = (new Date()).getTime(),
           y = parseFloat(this.responseText);
         //console.log(this.responseText);
-        if (chartL.series[0].data.length > 40) {
+        if (chartL.series[0].data.length > 6000) {
           chartL.series[0].addPoint([x, y], true, true, true);
         } else {
           chartL.series[0].addPoint([x, y], true, false, true);
@@ -203,56 +385,162 @@ copies or substantial portions of the Software. -->
 
 
 
- var chartW = new Highcharts.Chart({
-  chart: {
-    renderTo: "chart-wifi",
-    type: "spline",
-    animation: Highcharts.svg, // don't animate in old IE
-    marginRight: 10
-  },
-  title: { text: "Wi-fi Signal Strength" },
-  series: [
-    {
-      name: 'Wi-fi',
-      showInLegend: true,
-      data: []
-    }
-  ],
-  plotOptions: {
-    line: {
-      animation: true,
-      dataLabels: { enabled: true }
+  var chartW = new Highcharts.Chart({
+    chart: {
+      renderTo: "chart-wifi",
+      type: "spline",
+      animation: Highcharts.svg, // don't animate in old IE
+      marginRight: 10
     },
-    series: { color: "#8A2BE2" }
-  },
-  xAxis: {
-    type: "datetime",
-    dateTimeLabelFormats: { second: "%H:%M:%S" }
-  },
-  yAxis: {
-    title: { text: "dBm (dBm)" }
-  },
-  credits: { enabled: false }
-});
-setInterval(function () {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      var x = new Date().getTime(),
-        y = parseFloat(this.responseText);
-      //console.log(this.responseText);
-      if (chartW.series[0].data.length > 40) {
-        chartW.series[0].addPoint([x, y], true, true, true);
-      } else {
-        chartW.series[0].addPoint([x, y], true, false, true);
+    title: { text: "Wi-fi Signal Strength" },
+    series: [
+      {
+        name: 'Wi-fi',
+        showInLegend: true,
+        data: []
       }
+    ],
+    plotOptions: {
+      line: {
+        animation: true,
+        dataLabels: { enabled: true }
+      },
+      series: { color: "#8A2BE2" }
+    },
+    xAxis: {
+      type: "datetime",
+      dateTimeLabelFormats: { second: "%H:%M:%S" }
+    },
+    yAxis: {
+      title: { text: "dBm (dBm)" }
+    },
+    credits: { enabled: false }
+  });
+  setInterval(function () {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+        var x = new Date().getTime(),
+          y = parseFloat(this.responseText);
+        //console.log(this.responseText);
+        if (chartW.series[0].data.length > 6000) {
+          chartW.series[0].addPoint([x, y], true, true, true);
+        } else {
+          chartW.series[0].addPoint([x, y], true, false, true);
+        }
+      }
+    };
+    xhttp.open("GET", "/wifi", true);
+    xhttp.send();
+  }, 1000);
+
+
+  if (navigator.geolocation) {
+    console.log('Geolocation is supported!');
+  }
+  else {
+    console.log('Geolocation is not supported for this Browser/OS version yet.');
+  }
+
+
+  console.log(chartW.series[0].data.length);
+  console.log(chartL.series[0].data.length);
+
+  if (window.navigator.onLine) {
+
+    window.addEventListener('online', function (e) {
+      // Re-sync data with server.
+      console.log("Online");
+
+    }, false);
+
+    window.addEventListener('offline', function (e) {
+      // Queue up events for server.
+      console.log("Offline");
+
+    }, false);
+
+  }
+
+
+
+  if ('getBattery' in navigator) {
+
+    console.log(navigator.getBattery())
+  } else {
+    ChromeSamples.setStatus('The Battery Status API is not supported on ' +
+      'this platform.');
+  }
+
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      // stop running expensive task
+      console.log('Hidden');
+    } else {
+      // page has focus, begin running task
+      console.log('Visibility On');
     }
-  };
-  xhttp.open("GET", "/wifi", true);
-  xhttp.send();
-}, 1000);
+  });
+
+  if ('vibrate' in navigator) {
+    console.log('Vibrate iS ENABLE');
+    document.getElementById('button').addEventListener('click', function () {
+      navigator.vibrate(50);
+    });
+  } else {
+    console.log('Vibrate iS NOT ENABLE');
+  }
+
+
+
+/*
+
+  if (navigator.share) {
+
+    const shareData = {
+      title: 'Esp32',
+      text: 'Esp32! :)',
+      url: 'https://github.com/Joaosilgo/Esp32-Webserver',
+    }
+
+    const btn = document.getElementById('share');
+
+
+    // Deve ser acionado algum tipo de "ativação do usuário"
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.share(shareData)
+      } catch (err) {
+        console.log('Error: ' + e);
+      }
+      console.log(' Compartilhado com sucesso!');
+    });
+
+  }
+*/
+
+  /*
+  
+    if (window.Notification && Notification.permission !== "denied") {
+      Notification.requestPermission((status) => {
+        // status is "granted", if accepted by user
+        var n = new Notification('Title', {
+          body: 'I am the body text!',
+          icon: 'https://joaosilgo.github.io/joaogomes/img/favicon.ico', // optional
+          image: 'https://raw.githubusercontent.com/Joaosilgo/dummy_db/main/svg/_portrait.svg',
+          badge: 'https://raw.githubusercontent.com/Joaosilgo/dummy_db/main/svg/_portrait.svg',
+          vibrate: [500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500],
+          timestamp: Date.parse('01 Jan 2000 00:00:00'),
+  
+        })
+      })
+    }
+  
+  */
 
 </script>
+
 
 
 </html>

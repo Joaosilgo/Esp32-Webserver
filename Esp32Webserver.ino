@@ -1,24 +1,47 @@
-
-//#include <WebServer.h>
+#include <AsyncTCP.h>
 #include <ESPmDNS.h>
 #include <WiFiManager.h>
 #include "ESPAsyncWebServer.h"
 #include "SPIFFS.h"
 #include "FirebaseESP32.h"
+/*#include <SPI.h>
+  #define BME_SCK 18
+  #define BME_MISO 19
+  #define BME_MOSI 23
+  #define BME_CS 5*/
+#include <Wire.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BME280.h>
 
 
+<<<<<<< HEAD
+=======
 //Firebase service account : "firebase-adminsdk-trg39@esp32-f9c31.iam.gserviceaccount.com"
 
 #define FIREBASE_HOST "https://esp32-f9c31-default-rtdb.europe-west1.firebasedatabase.app/" //Change to your Firebase RTDB project ID e.g. Your_Project_ID.firebaseio.com
 #define FIREBASE_AUTH "" //Change to your Firebase RTDB secret password
+>>>>>>> 181002ad54428ac72454975ef0ce17e6694e2c4c
 
+#define FIREBASE_HOST "" //Change to your Firebase RTDB project ID e.g. Your_Project_ID.firebaseio.com
+#define FIREBASE_AUTH "" //Change to your Firebase RTDB secret password
+#define ONBOARD_LED  2
+#define PIN_RESET_BUTTON 2
+#define PIN_BUZZER 0
 //Define FirebaseESP32 data object
 FirebaseData firebaseData;
 FirebaseJson json;
-//String path = "/data";
+String path = "/sensor1";
+//WebServer
+AsyncWebServer server(80);
+WiFiManager wm;
+int RESET = 0;
+Adafruit_BME280 bmp; // I2C
+//Adafruit_BME280 bme(BME_CS); // hardware SPI
+//Adafruit_BME280 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK); // software SPI
+hw_timer_t *timer = NULL; //faz o controle do temporizador (interrupção por tempo)
 
 
-
+//------------SET FIREBASE------------
 void setFirebase() {
 
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
@@ -34,35 +57,12 @@ void setFirebase() {
 
     Firebase.enableClassicRequest(firebaseData, true);
   */
-
-
 }
 
-
-/*
-  #include <Wire.h>
-  #include <Adafruit_Sensor.h>
-  #include <Adafruit_BME280.h>
-*/
-/*#include <SPI.h>
-  #define BME_SCK 18
-  #define BME_MISO 19
-  #define BME_MOSI 23
-  #define BME_CS 5*/
-
-//Adafruit_BME280 bme; // I2C
-//Adafruit_BME280 bme(BME_CS); // hardware SPI
-//Adafruit_BME280 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK); // software SPI
-
-
-
-
-
-
-/*
-  String readBME280Temperature() {
+//------------Return BME Temperature------------
+String readBME280Temperature() {
   // Read temperature as Celsius (the default)
-  float t = bme.readTemperature();
+  float t = bmp.readTemperature();
   // Convert temperature to Fahrenheit
   //t = 1.8 * t + 32;
   if (isnan(t)) {
@@ -70,39 +70,36 @@ void setFirebase() {
     return "";
   }
   else {
-    Serial.println(t);
+    //Serial.println(t);
     return String(t);
   }
-  }
+}
 
-  String readBME280Humidity() {
-  float h = bme.readHumidity();
+//------------Return BME Humidity------------
+String readBME280Humidity() {
+  float h = bmp.readHumidity();
   if (isnan(h)) {
     Serial.println("Failed to read from BME280 sensor!");
     return "";
   }
   else {
-    Serial.println(h);
+    //Serial.println(h);
     return String(h);
   }
-  }
+}
 
-  String readBME280Pressure() {
-  float p = bme.readPressure() / 100.0F;
+//------------Return BME Pressure------------
+String readBME280Pressure() {
+  float p = bmp.readPressure() / 100.0F;
   if (isnan(p)) {
     Serial.println("Failed to read from BME280 sensor!");
     return "";
   }
   else {
-    Serial.println(p);
+    //Serial.println(p);
     return String(p);
   }
-  }
-
-
-*/
-
-
+}
 
 String readLdr() {
   // Read LDR Value (the default)
@@ -114,19 +111,15 @@ String readLdr() {
     return "";
   }
   else {
-    Serial.println(sensorValue, DEC); // prints the value read
-    //Serial.println(sensorValue);
+    //Serial.println(sensorValue, DEC); // prints the value read
     //float voltagem = sensorValue * (3.3 / 1024.0);   // Converter a leitura analógica (que vai de 0 - 1023) para uma voltagem (0 - 3.3V), quanto de acordo com a intensidade de luz no LDR a voltagem diminui.
     //Serial.println(voltagem);   // Mostrar valor da voltagem no monitor serial
     return String(sensorValue);
   }
 }
 
-
-
-
+//------------Return Wifi RSSI------------
 long getRssi() {
-
   if (WiFi.status() != WL_CONNECTED) {
     Serial.println("Couldn't get a wifi connection!");
     // return "";
@@ -135,26 +128,37 @@ long getRssi() {
   else {
     // print the received signal strength:
     long rssi = WiFi.RSSI();
-    Serial.print("RSSI:");
-    Serial.println(rssi);
+    //Serial.print("RSSI:");
+    //Serial.println(rssi);
     //  return String(rssi);
     return  rssi;
   }
 }
 
-
+//------------Return streamToFirebase------------
 void streamToFirebase() {
+  //Get the value from getRssi() convert to json and update the cloud with the path /data + path( id of node e.g)
   int value = getRssi();
-  json.set("/data", value);
-  Firebase.updateNode(firebaseData, "/data", json);
+  json.set("/rssi", value);
+  Firebase.updateNode(firebaseData, "/data" + path, json);
 }
 
+//------------Buzz active buzzer------------
+void buzzing() {
+  int i;//freq
+  for (i = 0; i < 80; i++) {
+    digitalWrite(PIN_BUZZER, HIGH);
+    delay(1);//wait for 1ms
+    digitalWrite(PIN_BUZZER, LOW);
+    delay(1);//wait for 1ms
+  }
+}
 
-//WebServer server(80);
-AsyncWebServer server(80);
-WiFiManager wm;
-#define PIN_RESET_BUTTON 2
-int RESET = 0;
+//função que o temporizador irá chamar, para reiniciar o ESP32
+void IRAM_ATTR resetModule() {
+  ets_printf("(watchdog) reiniciar\n"); //imprime no log
+  ESP.restart(); //reinicia o chip
+}
 
 
 void setup() {
@@ -163,7 +167,6 @@ void setup() {
   pinMode(PIN_RESET_BUTTON, INPUT);
   //WiFiManager
   //Local intialization. Once its business is done, there is no need to keep it around
-
   //reset saved settings
   //wm.resetSettings();
   //wm.setBreakAfterConfig(true);
@@ -173,40 +176,35 @@ void setup() {
   //Try to connect WiFi, then create AP
   wm.autoConnect("ESP32_AP", "");
 
+  pinMode(ONBOARD_LED, OUTPUT);//Onboard Blue Led
+  pinMode(PIN_BUZZER, OUTPUT); //initialize the buzzer pin as an output
 
+  //Setup Bme
+  if (!bmp.begin(0x76)) {
+    Serial.println("Could not find a valid BMP280 sensor, check wiring!");
+    while (1);
+  }
 
-  /*
-    bool status;
-    // default settings
-    // (you can also pass in a Wire library object like &Wire2)
-    status = bme.begin(0x76);
-    if (!status) {
-      Serial.println("Could not find a valid BME280 sensor, check wiring!");
-      while (1);
-    }
-  */
-
-  //Idem avec nom automatique de la forme ESP + ChipID et sans mot de passe
-  //wifiManager.autoConnect();
   //the library is blocking. Once connected, the program continues
   Serial.println("ESP32 is connected to Wi-Fi network");
 
   setFirebase();
 
+  //Setup Spiff
   if (!SPIFFS.begin()) {
     Serial.println("An Error has occurred while mounting SPIFFS");
     return;
   }
 
+  //Setup MDNS
   if (!MDNS.begin("esp32")) {
     Serial.println("Error starting mDNS");
     return;
   }
 
-
   // Route for root / web page
   server.on("/", HTTP_GET, [](AsyncWebServerRequest * request) {
-    request->send(SPIFFS, "/index.html");
+    request->send(SPIFFS, "/index.html", "text/html" );
   });
   server.on("/light", HTTP_GET, [](AsyncWebServerRequest * request) {
     request->send_P(200, "text/plain", readLdr().c_str());
@@ -214,32 +212,48 @@ void setup() {
   server.on("/wifi", HTTP_GET, [](AsyncWebServerRequest * request) {
     request->send_P(200, "text/plain", String(getRssi()).c_str());
   });
-  /*
-    server.on("/temperature", HTTP_GET, [](AsyncWebServerRequest * request) {
-    request->send_P(200, "text/plain", readBME280Temperature().c_str());
-    });
-    server.on("/humidity", HTTP_GET, [](AsyncWebServerRequest * request) {
-    request->send_P(200, "text/plain", readBME280Humidity().c_str());
-    });
-    server.on("/pressure", HTTP_GET, [](AsyncWebServerRequest * request) {
-    request->send_P(200, "text/plain", readBME280Pressure().c_str());
-    });
 
-  */
+  server.on("/temperature", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send_P(200, "text/plain", readBME280Temperature().c_str());
+  });
+
+  server.on("/pressure", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send_P(200, "text/plain", readBME280Pressure().c_str());
+  });
+
+  server.on("/humidity", HTTP_GET, [](AsyncWebServerRequest * request) {
+    request->send_P(200, "text/plain", readBME280Humidity().c_str());
+  });
+
   server.begin();
   Serial.println("HTTP server started");
   delay(100);
+
+  timer = timerBegin(0, 80, true); //timerID 0, div 80
+  //timer, callback, interrupção de borda
+  timerAttachInterrupt(timer, &resetModule, true);
+  //timer, tempo (us), repetição
+  timerAlarmWrite(timer, 10000000, true);
+  timerAlarmEnable(timer); //habilita a interrupção
+  delay(100);
 }
 void loop() {
-
+  timerWrite(timer, 0); //reseta o temporizador (alimenta o watchdog)
   RESET = digitalRead(PIN_RESET_BUTTON);
   if ( RESET == HIGH) {
     Serial.println("Erase settings and restart ...");
     delay(1000);
     wm.resetSettings();
+    buzzing();
     ESP.restart();
   }
 
-  //getRssi();
+  //Stream to firebase
   streamToFirebase();
+
+  //blink Onboard led
+  digitalWrite(ONBOARD_LED, HIGH);
+  delay(100);
+  digitalWrite(ONBOARD_LED, LOW);
+
 }
