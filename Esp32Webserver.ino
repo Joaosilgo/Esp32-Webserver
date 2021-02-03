@@ -14,13 +14,7 @@
 #include <Adafruit_BME280.h>
 
 
-<<<<<<< HEAD
-=======
-//Firebase service account : "firebase-adminsdk-trg39@esp32-f9c31.iam.gserviceaccount.com"
 
-#define FIREBASE_HOST "https://esp32-f9c31-default-rtdb.europe-west1.firebasedatabase.app/" //Change to your Firebase RTDB project ID e.g. Your_Project_ID.firebaseio.com
-#define FIREBASE_AUTH "" //Change to your Firebase RTDB secret password
->>>>>>> 181002ad54428ac72454975ef0ce17e6694e2c4c
 
 #define FIREBASE_HOST "" //Change to your Firebase RTDB project ID e.g. Your_Project_ID.firebaseio.com
 #define FIREBASE_AUTH "" //Change to your Firebase RTDB secret password
